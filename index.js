@@ -19,15 +19,14 @@ const FakeSchema = new Schema({
 });
 
 const config = {
-  user: '<mongo_db_user>',
-  pass: '<mongo_db_password>',
+  user: 'mlab',
+  pass: 'mlab2019',
   auth: {
-    authdb: '<mongo_db_authdb>',
+    authdb: 'heroku_0zjh8fcf',
   },
-  host: '<mongo_db_host>',
-  port: '<mongo_db_port>',
-  database: '<mongo_db_database>',
-  options: {
+  host: 'ds211268.mlab.com',
+  port: '11268',
+  database: 'heroku_0zjh8fcf',  options: {
     poolSize: 10, // default=5
     promiseLibrary: global.Promise,
     useNewUrlParser: true,
@@ -85,6 +84,16 @@ const main = async () => {
 
     console.log('creating model');
     const FakeModel = await connection.model('FakeModel', FakeSchema);
+
+    Object.keys(connection.models).forEach((model) => {
+      delete connection.models[model];
+    });
+    Object.keys(connection.collections).forEach((collection) => {
+      delete connection.collections[collection];
+    });
+    Object.keys(connection.base.modelSchemas).forEach((modelSchema) => {
+      delete connection.base.modelSchemas[modelSchema];
+    });
 
     console.log('closing connection');
     await connection.close();
